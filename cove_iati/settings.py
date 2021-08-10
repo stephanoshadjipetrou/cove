@@ -42,10 +42,12 @@ SECRET_KEY = settings.SECRET_KEY
 DEBUG = settings.DEBUG
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 MIDDLEWARE = settings.MIDDLEWARE
-MIDDLEWARE += ('dealer.contrib.django.Middleware',)
+MIDDLEWARE += ('dealer.contrib.django.Middleware','corsheaders.middleware.CorsMiddleware',)
 ROOT_URLCONF = settings.ROOT_URLCONF
 TEMPLATES = settings.TEMPLATES
 WSGI_APPLICATION = settings.WSGI_APPLICATION
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # We can't take DATABASES from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
@@ -77,7 +79,7 @@ LOGGING = settings.LOGGING
 if getattr(settings, 'RAVEN_CONFIG', None):
     RAVEN_CONFIG = settings.RAVEN_CONFIG
 
-INSTALLED_APPS = settings.INSTALLED_APPS + ('cove_iati', )
+INSTALLED_APPS = settings.INSTALLED_APPS + ('cove_iati', 'corsheaders',)
 WSGI_APPLICATION = 'cove_iati.wsgi.application'
 ROOT_URLCONF = 'cove_iati.urls'
 COVE_CONFIG = {

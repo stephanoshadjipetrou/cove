@@ -121,12 +121,11 @@ def explore_iati(request, pk):
 def api_test(request):
     form = UploadApi(request.POST, request.FILES)
     if form.is_valid():
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            file_path = os.path.join(tmpdirname, form.cleaned_data['name'])
-            with open(file_path, 'wb+') as destination:
-                for chunk in request.FILES['file'].chunks():
-                    destination.write(chunk)
-            result = iati_json_output(tmpdirname, file_path, form.cleaned_data['openag'], form.cleaned_data['orgids'])
-            return HttpResponse(json.dumps(result), content_type='application/json')
+        file_path = os.path.join('media', form.cleaned_data['name'])
+        with open(file_path, 'wb+') as destination:
+            for chunk in request.FILES['file'].chunks():
+                destination.write(chunk)
+        result = iati_json_output(settings.MEDIA_ROOT, file_path, form.cleaned_data['openag'], form.cleaned_data['orgids'])
+        return HttpResponse(json.dumps(result), content_type='application/json')
     else:
         return HttpResponseBadRequest(json.dumps(form.errors), content_type='application/json')
